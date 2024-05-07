@@ -1,6 +1,17 @@
 #!/bin/bash
-set -x
-# !! exec by root sudo -i !!
+
+set -Eeuo pipefail
+
+is_user_root() { [ "${EUID:-$(id -u)}" -eq 0 ]; }
+
+# Check for sudo privileges
+if is_user_root; then
+    echo "You are the almighty root!"
+else
+    echo "This script must be run as root." >&2
+    exit 1
+fi
+
 USER_NAME=nomad
 USER_PASS='2'
 # Global Ubuntu things
